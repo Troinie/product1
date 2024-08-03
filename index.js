@@ -16,6 +16,9 @@ const cookieParser = require("cookie-parser");
 // cài session
 const session = require("express-session");
 
+// cài tinimce
+const path = require('path');
+
 const database = require("./config/database");
 
 const systemConfig = require("./config/system");
@@ -50,6 +53,12 @@ app.use(flash());
 // cài pug
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
+
+// cài tinimce
+app.use(
+    '/tinymce',
+    express.static(path.join(__dirname, 'node_modules', 'tinymce'))
+);
 
 
 // app locals (biến toàn cục)

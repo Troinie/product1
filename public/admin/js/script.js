@@ -175,7 +175,6 @@ if (uploadImage) {
 
 
 // sort
-
 const sort = document.querySelector("[sort]");
 if (sort) {
 

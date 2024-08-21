@@ -23,6 +23,9 @@ const database = require("./config/database");
 
 const systemConfig = require("./config/system");
 
+// cài đổi thời gian (mã hoá thời gian)
+const moment = require("moment")
+
 //chạy env phải cài thư viện dotenv
 require("dotenv").config();
 
@@ -63,7 +66,7 @@ app.use(
 
 // app locals (biến toàn cục)
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
-
+app.locals.moment = moment;
 
 // bootstrap
 app.use(express.static(`${__dirname}/public`));
@@ -73,6 +76,11 @@ app.use(express.static(`${__dirname}/public`));
 route(app);
 routeAdmin(app);
 
+app.get("*", (req, res) => {
+    res.render("client/pages/errors/404", {
+        pageTitle: "404 Not Found",
+    });
+});
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)

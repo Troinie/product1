@@ -57,7 +57,7 @@ module.exports.index = async (req, res) => {
     res.render("admin/pages/products-category/index", {
         pageTitle: "Danh mục sản phẩm",
         records: newRecords,
-        pagination:  objectPagination,
+        pagination: objectPagination,
         filterStatus: filterStatus,
         keyword: objectSearch.keyword
     });
@@ -84,17 +84,22 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req, res) => {
-    if (req.body.position == "") {
-        const count = await ProductCategory.countDocuments();
-        req.body.position = count + 1;
+    const permissions = res.locals.role.permissions;
+    if (permissions.includes("products-category_create")) {
+        if (req.body.position == "") {
+            const count = await ProductCategory.countDocuments();
+            req.body.position = count + 1;
+        } else {
+            req.body.position = parseInt(req.body.position);
+        }
+
+        const record = new ProductCategory(req.body);
+        await record.save();
+
+        res.redirect(`${systemConfig.prefixAdmin}/products-category`);
     } else {
-        req.body.position = parseInt(req.body.position);
+        res.send("404");
     }
-
-    const record = new ProductCategory(req.body);
-    await record.save();
-
-    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
 
 }
 
@@ -103,7 +108,7 @@ module.exports.createPost = async (req, res) => {
 module.exports.edit = async (req, res) => {
 
     // dùng try catch vì khi ngta nhập trên url có thể bị sập web
-    try {       
+    try {
         const id = req.params.id;
 
         const data = await ProductCategory.findOne({

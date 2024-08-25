@@ -26,6 +26,10 @@ const systemConfig = require("./config/system");
 // cài đổi thời gian (mã hoá thời gian)
 const moment = require("moment")
 
+// cài socket.io
+const http = require("http");
+const { Server } = require("socket.io");
+
 //chạy env phải cài thư viện dotenv
 require("dotenv").config();
 
@@ -57,6 +61,11 @@ app.use(flash());
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 
+// Socket.io
+const server = http.createServer(app);
+const io = new Server(server);
+global._io = io;
+
 // cài tinimce
 app.use(
     '/tinymce',
@@ -82,6 +91,6 @@ app.get("*", (req, res) => {
     });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })

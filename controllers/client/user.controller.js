@@ -82,6 +82,16 @@ module.exports.loginPost = async (req, res) => {
 
     res.cookie("tokenUser", user.tokenUser);
 
+    await User.updateOne({
+        _id: user.id
+    }, {
+        statusOnline: "online"
+    });
+
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id);
+    });
+
     // lưu user_id vào model cart(giỏ hàng)
     await Cart.updateOne({
         _id: req.cookies.id
@@ -95,6 +105,16 @@ module.exports.loginPost = async (req, res) => {
 
 // [GET] /user/logout
 module.exports.logout = async (req, res) => {
+    await User.updateOne({
+        _id: res.locals.user.id
+    }, {
+        statusOnline: "offline"
+    });
+
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_OFFLINE", res.locals.user.id);
+    });
+
     // xoá cookies
     res.clearCookie("tokenUser");
 
@@ -138,8 +158,8 @@ module.exports.forgotPasswordPost = async (req, res) => {
     await forgotPassword.save();
 
     // việc 2: gửi mã OTP qua email của user
-    const subject=`Mã OTP xác minh lấy lại mật khẩu`;
-    const html=`Mã OTP xác minh lấy lại mật khẩu là <b>${otp}</b>. Thời gian sử dụng là 1'30s. Lưu ý không để lộ mã OTP.`
+    const subject = `Mã OTP xác minh lấy lại mật khẩu`;
+    const html = `Mã OTP xác minh lấy lại mật khẩu là <b>${otp}</b>. Thời gian sử dụng là 1'30s. Lưu ý không để lộ mã OTP.`
 
     sendMailHelper.sendMail(email, subject, html);
 
@@ -169,7 +189,7 @@ module.exports.otpPasswordPost = async (req, res) => {
         otp: otp
     });
 
-    if(!result){
+    if (!result) {
         req.flash("error", `OTP không hợp lệ!`);
         res.redirect("back");
         return;
@@ -200,7 +220,7 @@ module.exports.resetPasswordPost = async (req, res) => {
 
     await User.updateOne({
         tokenUser: tokenUser
-    },{
+    }, {
         password: md5(password)
     });
 

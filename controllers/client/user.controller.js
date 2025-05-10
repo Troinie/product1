@@ -1,5 +1,5 @@
 const User = require("../../models/user.model");
-
+ 
 const ForgotPasword = require("../../models/forgot-pasword.model");
 
 const Cart = require("../../models/cart.model");
@@ -213,7 +213,7 @@ module.exports.resetPassword = async (req, res) => {
 };
 
 
-// [GET] /user/password/reset
+// [POST] /user/password/reset
 module.exports.resetPasswordPost = async (req, res) => {
     const password = req.body.password;
     const tokenUser = req.cookies.tokenUser;
@@ -230,9 +230,74 @@ module.exports.resetPasswordPost = async (req, res) => {
 };
 
 
-// [GET] /user/info
-module.exports.info = async (req, res) => {
-    res.render("client/pages/user/info", {
-        pageTitle: "Thông tin tài khoản"
+// [GET] /user/edit/:id
+module.exports.edit = async (req, res) => {
+    const find = {
+        _id: res.locals.user.id,
+        deleted: false 
+    }
+
+    // console.log(res.locals.user.id);
+
+    const data = await User.find(find);
+
+    // console.log(user);
+ 
+    res.render("client/pages/user/edit", {
+        pageTitle: "Tài khoản",
+        data: data
     });
 };
+
+
+// [PATCH] /admin/accounts/edit/:id 
+module.exports.editPatch = async (req, res) => {
+    const id = res.locals.user.id;
+
+    // console.log(id);
+
+    // check xem email đã tồn tại chưa
+    const emailExist = await User.findOne({
+        // _id: id, //
+        _id: { $ne: id}, 
+        email: req.body.email,
+        deleted: false
+    });
+
+    if (emailExist) {
+        req.flash("error", `Email ${req.body.email} đã tồn tại!`);
+    } else {
+        if (req.body.password) {
+            req.body.password = md5(req.body.password);
+        } else {
+            delete req.body.password;
+        }
+
+        await User.updateOne({
+            _id: id
+        }, req.body);
+
+        req.flash("success", "Cập nhật tài khoản thành công!");
+    }
+
+    res.redirect("back")
+}
+
+
+// [GET] /user/info
+module.exports.info = async (req, res) => {
+    const find = {
+        _id: res.locals.user.id,
+        deleted: false
+    }
+
+    // console.log(res.locals.user.id);
+
+    const data = await User.find(find);
+
+    res.render("client/pages/user/info", {
+        pageTitle: "Thông tin tài khoản",
+        data: data
+    });
+};
+

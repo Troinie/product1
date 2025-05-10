@@ -2,7 +2,36 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
 block main
-    .container.my-3
-        .row
-            .col-12
-                +box-head("Thông tin cá nhân")
+    h1(class="mb-4") Thông tin cá nhân
+
+    div(class="form-group")
+        label(for="fullName") Họ tên
+        input(
+            type="text"
+            class="form-control"
+            id="fullName"
+            name="fullName"
+            required
+            value=user.fullName
+        )
+    div(class="form-group") 
+        label(for="email") Email *
+        input(
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            required
+            value=user.email
+        )
+    div(class="form-group")
+        label(for="phone") Số điện thoại
+        input(
+            type="text"
+            class="form-control"
+            id="phone"
+            name="phone"
+            value=user.phone
+        )
+    p
+        a(href=`/user/edit/${user.id}` class="btn btn-secondary") Chỉnh sửa thông tin cá nhân 

@@ -1,6 +1,5 @@
-module.exports =(query)=>{
-    let filterStatus = [
-        {
+module.exports = (query) => {
+    let filterStatus = [{
             name: "Tất cả",
             status: "",
             class: ""

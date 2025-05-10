@@ -1,5 +1,5 @@
 const md5 = require('md5');
-
+ 
 const Account = require("../../models/account.model");
 
 const systemConfig = require("../../config/system");
@@ -39,7 +39,7 @@ module.exports.loginPost = async (req, res) => {
     }
 
     if (user.status == "inactive") {
-        req.flash("error", "Tài khoản đã bị  khoá!");
+        req.flash("error", "Tài khoản đã bị khoá!");
         res.redirect("back");
         return;
     }

@@ -28,7 +28,7 @@ module.exports.index = async (req, res) => {
     });
 }
 
-
+ 
 // [GET] /admin/accounts/create
 module.exports.create = async (req, res) => {
     const roles = await Role.find({
@@ -97,6 +97,7 @@ module.exports.editPatch = async (req, res) => {
 
     // check xem email đã tồn tại chưa
     const emailExist = await Account.findOne({
+        // _id: id, //
         _id: { $ne: id}, 
         email: req.body.email,
         deleted: false
@@ -119,4 +120,25 @@ module.exports.editPatch = async (req, res) => {
     }
 
     res.redirect("back")
+}
+
+
+// [GET] /admin/accounts/detail/:id
+module.exports.detail = async (req, res) => {
+    let find = {
+        deleted: false,
+        _id: req.params.id
+    };
+
+    const data = await Account.findOne(find);
+
+    const roles = await Role.find({
+        deleted: false,
+    });
+
+    res.render("admin/pages/accounts/detail", {
+        pageTitle: "Chi tiết tài khoản",
+        data: data,
+        roles: roles
+    });
 }

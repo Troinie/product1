@@ -85,7 +85,6 @@ if (checkboxMulti) {
             } else {
                 inputcheckAll.checked = false;
             }
-
         });
     });
 }

@@ -41,12 +41,14 @@ header.header
                         if(user)
                             //- li  
                             //-     a(href="/chat") Chat
-                            li  
-                                a(href="/users/friends") Bạn bè
-                            li  
-                                a(href="/rooms-chat") Phòng chat   
+                            //- li  
+                            //-     a(href="/users/friends") Bạn bè
+                            //- li  
+                            //-     a(href="/rooms-chat") Phòng chat   
                             li  
                                 a(href="/user/info") #{user.fullName}
+                            //- li  
+                            //-     a(href="/user/edit") Chỉnh sửa tài khoản
                             li  
                                 a(href="/user/logout") Đăng xuất
                         else

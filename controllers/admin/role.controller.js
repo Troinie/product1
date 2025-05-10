@@ -148,13 +148,17 @@ module.exports.permissions = async (req, res) => {
 
 // [PATCH] /admin/roles/permissions
 module.exports.permissionsPatch = async (req, res) => {
-    const permissions=JSON.parse(req.body.permissions);
+    const permissions = JSON.parse(req.body.permissions);
 
     for (const item of permissions) {
-        const id=item.id;
-        const permissions=item.permissions;
+        const id = item.id;
+        const permissions = item.permissions;
 
-        await Role.updateOne({ _id: id }, { permissions: permissions });
+        await Role.updateOne({ 
+            _id: id 
+        }, { 
+            permissions: permissions 
+        });
     } 
 
     req.flash("success", "Cập nhật phân quyền thành công!");

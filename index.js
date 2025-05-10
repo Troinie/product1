@@ -4,7 +4,7 @@ const express = require('express');
 //  cài method-override
 const methodOverride = require('method-override')
 
-//  cài body-parser
+//  cài body-parser để lấy đc req.body
 const bodyParser = require('body-parser');
 
 // cài flash
@@ -42,6 +42,7 @@ database.connect();
 const app = express();
 const port = process.env.PORT;
 
+//  cài method-override
 app.use(methodOverride('_method'));
 
 app.use(bodyParser.urlencoded({
@@ -77,7 +78,7 @@ app.use(
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 app.locals.moment = moment;
 
-// bootstrap
+// (để mở đc các file trong thư mục public)
 app.use(express.static(`${__dirname}/public`));
 
 

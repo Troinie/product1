@@ -30,6 +30,9 @@ router.patch(
     upload.single("avatar"),
     uploadCloud.upload,
     validate.editPatch,
-    controller.editPatch);
+    controller.editPatch
+);
+
+router.get('/detail/:id', controller.detail);
 
 module.exports = router; 

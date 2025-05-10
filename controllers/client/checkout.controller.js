@@ -44,6 +44,7 @@ module.exports.index = async (req, res) => {
 module.exports.order = async (req, res) => {
     const cartId = req.cookies.cartId;
     const userInfo = req.body;
+    // console.log(userInfo);
 
     const cart = await Cart.findOne({
         _id: cartId

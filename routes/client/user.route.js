@@ -51,4 +51,16 @@ router.get(
     controller.info
 );
 
+router.get(
+    '/edit/:id', 
+    authMiddleware.requireAuth,
+    controller.edit
+);
+
+router.patch(
+    '/edit/:id', 
+    authMiddleware.requireAuth,
+    controller.editPatch
+);
+
 module.exports = router;

@@ -32,12 +32,20 @@ module.exports.index = async (req, res) => {
     if (objectSearch.regex)
         find.title = objectSearch.regex;
 
+    // let keyword = "";
+    // if(req.query.keyword){
+    //     keyword = req.query.keyword;
+    //     const regex = new RegExp(keyword, "i")
+    //     find.title = regex
+    // }
+
     // pagination
     const countProducts = await Product.countDocuments(find);
 
-    let objectPagination = paginationHelper({
-            currentPage: 1,
-            limitItem: 5
+    let objectPagination = paginationHelper(
+        {
+            currentPage: 1,  //objectPagination
+            limitItem: 5     //objectPagination
         },
         req.query,
         countProducts
@@ -99,14 +107,17 @@ module.exports.changeStatus = async (req, res) => {
         updatedAt: new Date()
     }
 
-    await Product.updateOne({
-        _id: id
-    }, {
-        status: status,
-        $push: {
-            updatedBy: updatedBy
+    await Product.updateOne(
+        {
+            _id: id
+        }, 
+        {
+            status: status,
+            $push: {
+                updatedBy: updatedBy
+            }
         }
-    });
+    );
 
     req.flash("success", "Cập nhật trạng thái thành công!");
 
@@ -118,6 +129,8 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");
+
+    // console.log(req.body);
 
     const updatedBy = {
         account_id: res.locals.user.id,

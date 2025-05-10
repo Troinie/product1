@@ -87,10 +87,14 @@ module.exports.delete = async (req, res) => {
     await Cart.updateOne({
         _id: cartId
     }, {
-        "$pull": { products: { "product_id": productId } }
+        "$pull": {  // xoá 1 phần tử trong mảng
+            products: {
+                "product_id": productId
+            }
+        }
     });
 
-    res.flash("success", "Đã xoá sản phẩm khỏi giỏ hàng!")
+    req.flash("success", "Đã xoá sản phẩm khỏi giỏ hàng!")
     res.redirect("back");
 };
 

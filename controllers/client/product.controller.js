@@ -5,7 +5,7 @@ const ProductsCategory = require("../../models/product-category.model");
 const productsHelper = require("../../helpers/product")
 
 const producCategorytsHelper = require("../../helpers/products-category");
-
+ 
 // [GET] /products
 module.exports.index = async (req, res) => {
     const products = await Product.find({
@@ -24,14 +24,15 @@ module.exports.index = async (req, res) => {
 }
 
 
-// [GET] /products/:slugProduct
+// [GET] /products/detail/:slugProduct
 module.exports.detail = async (req, res) => {
     try {
         const find = {
             deleted: false,
-            slug: req.params.id,
+            slug: req.params.slugProduct,
             status: "active"
         };
+        console.log(req.params.id)
 
         const product = await Product.findOne(find);
 

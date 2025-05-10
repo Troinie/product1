@@ -10,7 +10,7 @@ block main
 
         if(roles)
             form(
-                action=`${prefixAdmin}/accounts/edit/${data.id}?_method-PATCH`
+                action=`${prefixAdmin}/accounts/edit/${data.id}?_method=PATCH`
                 method="POST"
                 enctype="multipart/form-data"
             )
